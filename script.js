@@ -6,30 +6,13 @@ const postBtn = document.getElementById('social');
 
 let allQuotes = [];
 
-
-
-// set quotes and author 
-
-function settingQuotes(){
-    const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
-    // Check if Author field is blank and replace it with 'Unknown'
-    if (!quote.author) {
-      authorName.textContent = 'Unknown';
-    } else {
-      authorName.textContent = '-' + quote.author;
-    }
-
-    quoteText.textContent = quote.text;
-  
-}
-
 //Getting quotes API
 async function gettingQuotes(){
     const url = 'https://type.fit/api/quotes';
 
     try {
         const gotQuotes = await fetch(url);
-        allQuotes = await gotQuotes.json();
+        allQuotes = await gotQuotes.json(); 
         settingQuotes();
     }catch (err){
         console.log(err);
@@ -38,6 +21,21 @@ async function gettingQuotes(){
 
 //eventListener
 
-newQuoteBtn.addEventListener('click',settingQuotes);
+newQuoteBtn.addEventListener('click',()=>{
+  const quote = allQuotes[Math.floor(Math.random() * allQuotes.length)];
+  // Check if Author field is blank and replace it with 'Unknown'
+  if (!quote.author) {
+    authorName.textContent = 'Unknown';
+  } else {
+    authorName.textContent = '~' + quote.author;
+  }
+
+  quoteText.textContent = quote.text;
+});
+
+postBtn.addEventListener('click',()=>{
+  const tweetURL = `https://twitter.com/intent/tweet?text=${quoteText.textContent}~${authorName.textContent}`;
+  window.open(tweetURL,'_blank');
+})
 
 gettingQuotes();
